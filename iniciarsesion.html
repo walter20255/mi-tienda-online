@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Mundo Pino</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/tienda.css">
+</head>
+<body>
+    <div id="headerPlaceholder"></div> 
+
+    <main class="page-content">
+        <section class="auth-container">
+            <h1>Iniciar Sesión</h1>
+            <form id="loginForm">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
+
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required placeholder="Contraseña">
+
+                <button type="submit" class="btn-primary">Iniciar Sesión</button>
+            </form>
+            <p>¿No tienes cuenta? <a href="crearcuenta.html">Regístrate aquí</a></p>
+        </section>
+    </main>
+        <a href="https://wa.me/5491123456789" target="_blank" rel="noopener noreferrer" class="whatsapp-footer-btn" aria-label="Contactar por WhatsApp">
+  📱 WhatsApp
+</a>
+    <div id="footerPlaceholder"></div> 
+
+    <script src="/js/load-header-footer.js"></script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(e){
+            e.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            // Simulación de inicio de sesión
+            alert(`Inicio de sesión exitoso: ${email}`);
+
+            // Redirigir a la tienda o página principal
+            window.location.href = "tienda.html";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras | Mundo Pino</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/carrito.css">
+</head>
+<body> 
+    <div id="headerPlaceholder"></div>
+   <main class="page-content">
+        <h1>Tu Carrito de Compras</h1>
+        
+        <section class="cart-details">
+            <div id="cartItemsContainer" class="cart-items-list">
+                </div>
+            
+            <div class="cart-summary">
+                <h2>Resumen del Pedido</h2>
+                <p>Subtotal: <span id="cartSubtotal">$ 0</span></p>
+                <p>Envío: <span id="cartShipping">A calcular</span></p>
+                <h3>Total: <span id="cartTotal">$ 0</span></h3>
+                <button class="btn-primary" id="checkoutButton">Finalizar Compra</button>
+                <button class="btn-secondary" id="clearCartButton">Vaciar Carrito</button>
+            </div>
+        </section>
+    </main>
+<a href="https://wa.me/5491123456789" target="_blank" rel="noopener noreferrer" class="whatsapp-footer-btn" aria-label="Contactar por WhatsApp">
+  📱 WhatsApp
+</a>
+<div id="footerPlaceholder"></div>
+<script src="/js/load-header-footer.js"></script>
+<script src="/js/carrito.js"></script>
+</body>
+</html>

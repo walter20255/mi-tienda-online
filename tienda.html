@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Todos los Productos | Mundo Pino</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/tienda.css">
+</head>
+<body>
+    <!-- Header dinámico -->
+    <div id="headerPlaceholder"></div>
+
+    <main class="page-content"> 
+        <h1>Catálogo Completo</h1>
+
+        <!-- Filtros y orden -->
+        <section class="controls-container">
+            <h3>Filtrar</h3>
+            <div class="filter-group">
+                <label for="categoryFilter">Categoría:</label>
+                <select id="categoryFilter">
+                    <option value="all">Todas</option>
+                </select>
+            </div>
+            <div class="sort-group">
+                <label for="sortOrder">Ordenar por:</label>
+                <select id="sortOrder">
+                    <option value="default">Por defecto</option>
+                    <option value="price-asc">Precio (Menor a Mayor)</option>
+                    <option value="price-desc">Precio (Mayor a Menor)</option>
+                    <option value="name-asc">Nombre (A - Z)</option>
+                    <option value="name-desc">Nombre (Z - A)</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Productos -->
+        <section class="all-products">
+            <h2>Todos los Productos</h2>
+            <div class="product-grid" id="fullProductGrid"></div>
+        </section>
+    </main>
+<a href="https://wa.me/5491123456789" target="_blank" rel="noopener noreferrer" class="whatsapp-footer-btn" aria-label="Contactar por WhatsApp">
+  📱 WhatsApp
+</a>
+    <!-- FOOTER: siempre abajo -->
+    <div id="footerPlaceholder"></div>
+
+    <!-- Scripts al final -->
+    <script src="/js/load-header-footer.js"></script>
+    <script src="/js/tienda-unificada.js"></script>
+</body>
+</html>

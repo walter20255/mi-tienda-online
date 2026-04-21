@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="productPageTitle">Detalles del Producto | Mundo Pino</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/tienda.css"> 
+</head>
+<body>
+    <!-- Header dinámico -->
+    <div id="headerPlaceholder"></div> 
+
+    <main class="page-content">
+        <section class="product-detail" id="productDetailContainer">
+            <p>Cargando detalles...</p>
+        </section>
+
+        <!-- Productos similares -->
+        <section class="similar-products-section" id="similarProductsSection">
+            <!-- Se carga dinámicamente -->
+        </section>
+    </main>
+
+    <!-- Botón flotante WhatsApp -->
+    <a href="https://wa.me/5491123456789" target="_blank" rel="noopener noreferrer" class="whatsapp-footer-btn" aria-label="Contactar por WhatsApp">
+        📱 WhatsApp
+    </a>
+
+    <!-- Footer dinámico -->
+    <div id="footerPlaceholder"></div> 
+
+    <script src="/js/load-header-footer.js"></script>
+    <script src="/js/tienda-unificada.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat("es-AR", {
+            style: "currency",
+            currency: "ARS",
+            minimumFractionDigits: 0
+        }).format(price);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+
+    if (!productId) {
+        document.getElementById("productDetailContainer").innerHTML = "<p>Producto no encontrado.</p>";
+        return;
+    }
+
+    try {
+        
+        // **ATENCIÓN:** El código original de las líneas 36-93 (el slider de similares)
+        // ha sido ELIMINADO de aquí porque se ejecutaba antes de que existieran los elementos.
+        // Se moverá al final, después de renderizar los productos similares.
+        
+        const response = await fetch("products_classified.json");
+        const products = await response.json();
+
+        const product = products.find(p => p.id == productId);
+
+        if (!product) {
+            document.getElementById("productDetailContainer").innerHTML = "<p>Producto no encontrado.</p>";
+            return;
+        }
+
+        // Cambiar título
+        document.title = `${product.name} | Mundo Pino`;
+        document.getElementById("productPageTitle").textContent = product.name;
+
+        // Crear items de carrusel principal
+        const imagesCarousel = product.images
+            .map((img, index) => `
+                <div class="carousel-item ${index === 0 ? "active" : ""}">
+                    <img src="${img}" alt="${product.name}">
+                </div>
+            `).join("");
+
+        // Render del producto principal (Líneas 119-149)
+        document.getElementById("productDetailContainer").innerHTML = `
+            <div class="product-detail-grid">
+                <div class="product-images">
+                    <div class="carousel">
+                        ${imagesCarousel}
+                        <button class="prev">&lt;</button>
+                        <button class="next">&gt;</button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h1>${product.name}</h1>
+                    <p class="product-price">${formatPrice(product.price)}</p>
+                    <p class="product-description">${product.description || "Sin descripción disponible."}</p>
+
+                    <div class="product-actions">
+                        <label for="quantity">Cantidad:</label>
+                        <input type="number" id="quantity" value="1" min="1">
+
+                        <button id="btnAddCart" class="btn-primary">🛒 Agregar al carrito</button>
+                        <button id="btnBuyNow" class="btn-action">Comprar ahora</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Configurar carrito
+        const qtyInput = document.getElementById("quantity");
+
+        document.getElementById("btnAddCart").addEventListener("click", () => {
+            // Asumo que addToCart() es una función global definida en load-header-footer.js o tienda-unificada.js
+            addToCart(product.id, parseInt(qtyInput.value)); 
+        });
+
+        document.getElementById("btnBuyNow").addEventListener("click", () => {
+            addToCart(product.id, parseInt(qtyInput.value));
+            setTimeout(() => window.location.href = "carrito.html", 100);
+        });
+
+        // ================================
+        // CARRUSEL PRINCIPAL (Líneas 167-180) - Funciona porque el HTML ya fue inyectado
+        // ================================
+        const carousel = document.querySelector(".carousel");
+        const items = carousel.querySelectorAll(".carousel-item");
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            items.forEach((item, i) => item.classList.toggle("active", i === index));
+        }
+
+        carousel.querySelector(".prev").addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            showSlide(currentIndex);
+        });
+
+        carousel.querySelector(".next").addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % items.length;
+            showSlide(currentIndex);
+        });
+
+        // ================================
+        // PRODUCTOS SIMILARES (Creación de HTML)
+        // ================================
+        const similar = products
+        .filter(p => 
+        // 1. Debe ser de la misma categoría
+        p.category === product.category && 
+        // 2. Debe ser un producto diferente
+        p.id !== product.id &&
+        // 3. ¡CORRECCIÓN! Debe tener precio mayor a 0
+        p.price > 0 &&
+        // 4. ¡CORRECCIÓN! Debe tener al menos una imagen cargada
+        p.images && p.images.length > 0
+    )
+    .slice(0, 12); // hasta 12 para el slider
+
+        const similarSection = document.getElementById("similarProductsSection");
+
+        if (similar.length > 0) {
+            similarSection.innerHTML = `
+                <h2 class="similar-title">Productos similares</h2>
+                <div class="related-slider">
+                    <button class="related-prev" aria-label="Anterior">‹</button>
+                    <div class="related-track" id="relatedTrack">
+                    ${similar.map(sim => `
+                        <div class="related-card" data-id="${sim.id}">
+                        <img src="${sim.images[0]}" alt="${sim.name}">
+                        <h3 class="related-name">${sim.name}</h3>
+                        <p class="related-price">${formatPrice(sim.price)}</p>
+                        <div class="related-actions">
+                            <button class="related-view" data-id="${sim.id}">Ver</button>
+                            <button class="related-add" data-id="${sim.id}">🛒 Agregar</button>
+                        </div>
+                        </div>
+                    `).join("")}
+                    </div>
+                    <button class="related-next" aria-label="Siguiente">›</button>
+                </div>
+            `;
+
+            // ===============================================
+            // 💡 LÓGICA CORREGIDA: EVENTOS DEL SLIDER SIMILAR 
+            //    (Se ejecuta AQUÍ, DESPUÉS de inyectar el HTML)
+            // ===============================================
+
+            // Volvemos a seleccionar los elementos, AHORA SÍ EXISTEN
+            const track = document.getElementById("relatedTrack");
+            const btnPrev = document.querySelector(".related-prev");
+            const btnNext = document.querySelector(".related-next");
+
+            if (track) {
+                // Tamaño de desplazamiento: ancho de una tarjeta o 300px por defecto
+                const scrollAmount = Math.max(track.querySelector(".related-card")?.offsetWidth || 280, 280);
+
+                // Eventos de las flechas (flechas verdes)
+                btnPrev?.addEventListener("click", () => {
+                    track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+                });
+
+                btnNext?.addEventListener("click", () => {
+                    track.scrollBy({ left: scrollAmount, behavior: "smooth" });
+                });
+
+                // Soporte para arrastrar con mouse (opcional UX)
+                let isDown = false, startX, scrollLeft;
+                track.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    track.classList.add('dragging');
+                    startX = e.pageX - track.offsetLeft;
+                    scrollLeft = track.scrollLeft;
+                });
+                track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('dragging'); });
+                track.addEventListener('mouseup', () => { isDown = false; track.classList.remove('dragging'); });
+                track.addEventListener('mousemove', (e) => {
+                    if(!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - track.offsetLeft;
+                    const walk = (x - startX) * 1; // velocidad
+                    track.scrollLeft = scrollLeft - walk;
+                });
+
+                // Delegación de eventos para los botones dentro del track ("Agregar" y "Ver")
+                track.addEventListener("click", (e) => {
+                    const addBtn = e.target.closest(".related-add");
+                    if (addBtn) {
+                        const id = addBtn.dataset.id;
+                        addToCart(id, 1);
+                        return;
+                    }
+
+                    const viewBtn = e.target.closest(".related-view");
+                    if (viewBtn) {
+                        const id = viewBtn.dataset.id;
+                        window.location.href = `producto.html?id=${id}`;
+                        return;
+                    }
+
+                    const card = e.target.closest(".related-card");
+                    if (card && !e.target.closest("button")) {
+                        // Clic en la tarjeta - ir a producto
+                        const id = card.dataset.id;
+                        window.location.href = `producto.html?id=${id}`;
+                    }
+                });
+            } // Fin if (track)
+            
+            // ===============================================
+            // 🔚 FIN DE LA LÓGICA CORREGIDA 🔚
+            // ===============================================
+
+        } else {
+            similarSection.innerHTML = `<p>No hay productos similares disponibles.</p>`;
+        }
+
+    } catch (err) {
+        console.error("Error cargando producto:", err);
+        document.getElementById("productDetailContainer").innerHTML = "<p>Error al cargar el producto.</p>";
+    }
+});</script>
+
+<style>
+/* ================================
+   GENERAL
+================================ */
+.page-content {
+    padding: 40px 5%;
+}
+
+/* ================================
+   GRID PRINCIPAL
+================================ */
+.product-detail-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+/* ================================
+   IMÁGENES DEL PRODUCTO
+================================ */
+.product-images {
+    flex: 1 1 500px;
+    object-fit: contain;
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+}
+
+.carousel-item {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.carousel-item.active {
+    display: block;
+    opacity: 1;
+}
+
+.carousel img {
+    max-height: 500px;
+    object-fit: contain;
+    width: 100%;
+    border-radius: 12px;
+    background: #f7f7f7;
+}
+
+
+/* Flechas laterales */
+.carousel button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.45);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.2s;
+    font-size: 20px;
+}
+
+.carousel button:hover {
+    background-color: rgba(0,0,0,0.65);
+}
+
+.carousel .prev { left: 15px; }
+.carousel .next { right: 15px; }
+
+/* ================================
+   INFO DEL PRODUCTO
+================================ */
+.product-info {
+    flex: 1 1 400px;
+}
+
+.product-info h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2a7d2e;
+    margin-bottom: 15px;
+}
+
+.product-price {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.product-description {
+    font-size: 16px;
+    line-height: 1.45;
+    color: #444;
+    margin-bottom: 25px;
+}
+
+/* ================================
+   ACCIONES
+================================ */
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 320px;
+}
+
+.product-actions input[type="number"] {
+    width: 80px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Botones */
+.btn-primary,
+.btn-action {
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-primary {
+    background: #2ecc71;
+    color: #fff;
+}
+.btn-primary:hover { background: #27ae60; }
+
+.btn-action {
+    background: #3498db;
+    color: white;
+}
+.btn-action:hover { background: #2980b9; }
+/* RELATED SLIDER: track + cards + controls */
+.related-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 30px;
+}
+
+.related-prev, .related-next {
+  background: #2a7d2e;
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.related-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 6px 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* scrollbar pequeño */
+.related-track::-webkit-scrollbar { height: 8px; }
+.related-track::-webkit-scrollbar-thumb { background: #ccc; border-radius: 8px; }
+
+.related-card {
+  min-width: 220px;
+  max-width: 260px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.related-card img {
+ width: 100%;
+height: 150px;
+/* MODIFICACIÓN CLAVE: Cambiar 'cover' por 'contain' */
+object-fit: contain; 
+border-radius: 8px;
+background: #f7f7f7;
+}
+
+.related-card h3 { font-size: 15px; margin: 6px 0; color: #333; }
+.related-price {
+/* MODIFICACIÓN: Aumentar tamaño y grosor para que destaque */
+font-size: 1.5em; /* Antes era 1em (por defecto) */
+font-weight: 800; /* Extra bold */
+color: #000;
+}
+
+/* acciones */
+.related-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+.related-view, .related-add {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+.related-view { background: #e6f3ea; color: #2a7d2e; }
+.related-add  { background: #2ecc71; color: white; }
+
+.related-card:hover { transform: translateY(-4px); transition: .18s ease; }
+
+/* mobile tweaks */
+@media (max-width:600px) {
+  .related-prev, .related-next { width: 36px; height: 36px; font-size: 18px; }
+  .related-card { min-width: 180px; max-width: 200px; }
+}
+
+
+/* ================================
+   PRODUCTOS SIMILARES
+================================ */
+.similar-products-section {
+    margin-top: 60px;
+}
+
+.similar-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #2a7d2e;
+    margin-bottom: 20px;
+}
+
+.similar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.similar-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.similar-card:hover {
+    transform: translateY(-5px);
+}
+
+.similar-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background: #f7f7f7;
+    border-radius: 8px;
+}
+
+.similar-card h3 {
+    font-size: 18px;
+    margin-top: 12px;
+}
+
+.similar-card p {
+    font-size: 16px;
+    color: #444;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* ================================
+   BOTÓN WHATSAPP
+================================ */
+.whatsapp-footer-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #25d366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    text-decoration: none;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.whatsapp-footer-btn:hover {
+    transform: scale(1.08);
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+    .product-detail-grid {
+        flex-direction: column;
+    }
+
+    .product-info h1 {
+        text-align: center;
+    }
+
+    .product-actions {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+</style>
+</body>
+</html>

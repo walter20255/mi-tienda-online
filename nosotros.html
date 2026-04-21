@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nosotros - Mundo Pino</title>
+  <link rel="stylesheet" href="/css/index.css">
+  <meta name="description" content="Mundo Pino — Mueblería familiar fundada en 2020. Muebles de calidad a precios accesibles y asesoramiento personalizado." />
+
+  <style>
+    :root{
+      --color-primary: #4CAF50;
+      --bg: #ffffff;
+      --muted: #6b6b6b;
+      --container-w: 1100px;
+      --radius: 10px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      color:#222;
+      background: #f7f7f7;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Header simple (si ya tenés uno en el sitio podés quitar) */
+    .site-header{
+      background: var(--bg);
+      border-bottom: 1px solid #e6e6e6;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(4px);
+    }
+    .site-header .wrap{
+      max-width: var(--container-w);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo img{height:56px; width:auto;}
+    .site-title{font-weight:700; color:var(--color-primary); font-size:18px}
+
+    nav.main-nav{margin-left:auto}
+    nav.main-nav a{
+      text-decoration:none;
+      color:#333;
+      margin-left:14px;
+      font-weight:600;
+      font-size:14px;
+    }
+    nav.main-nav a:hover{color:var(--color-primary)}
+
+    /* Hero */
+    .hero{
+      background: linear-gradient(90deg, rgba(76,175,80,0.08), rgba(76,175,80,0.02));
+      padding:40px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .hero .wrap{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      max-width:var(--container-w);
+      margin:0 auto;
+    }
+    .hero h1{
+      margin:0;
+      font-size:28px;
+      color: #234923;
+    }
+    .hero p{margin:6px 0 0; color:var(--muted)}
+
+    /* Main content */
+    main.wrap{
+      max-width: var(--container-w);
+      margin: 36px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 18px rgba(17,17,17,0.04);
+      padding: 26px;
+    }
+
+    .lead {
+      color: #2b2b2b;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      align-items:start;
+    }
+
+    .values {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .value {
+      padding: 12px;
+      border-left: 4px solid var(--color-primary);
+      background: #fbfffb;
+      border-radius:6px;
+    }
+    .value h4{margin:0 0 6px 0}
+    .value p{margin:0; color:var(--muted); font-size:14px}
+
+    .contact-card {
+      padding:18px;
+      border-radius:8px;
+      background: linear-gradient(180deg,#f7fff7,#ffffff);
+      border:1px solid #e9efe9;
+    }
+    .contact-card h3{margin:0 0 10px 0; color: #234923}
+    .contact-card p{margin:0 0 8px 0; color:var(--muted)}
+    .btn {
+      display:inline-block;
+      background:var(--color-primary);
+      color:white;
+      padding:10px 14px;
+      border-radius:6px;
+      text-decoration:none;
+      font-weight:700;
+      margin-top:10px;
+    }
+
+    footer.site-footer{
+      margin-top:40px;
+      padding:24px 20px;
+      background:#fff;
+      border-top:1px solid #eee;
+      color:var(--muted);
+    }
+    footer .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .grid{grid-template-columns: 1fr}
+      nav.main-nav{display:none}
+      .hero h1{font-size:22px}
+      .logo img{height:48px}
+      .site-header .wrap{padding:10px}
+    }
+    @media (max-width:520px){
+      .hero{padding:20px}
+      .lead{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+<div id="headerPlaceholder"></div>
+
+  <section class="hero" aria-hidden="false">
+    <div class="wrap">
+      <div>
+        <h1>Nosotros</h1>
+        <p>Una mueblería familiar con foco en calidad, cercanía y precios accesibles.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap" role="main">
+    <article class="card" aria-labelledby="nosotros-title">
+      <h2 id="nosotros-title" style="margin-top:0">Sobre Mundo Pino</h2>
+
+      <div class="grid" role="region" aria-label="Descripción de la empresa">
+        <div>
+          <p class="lead">
+            Somos una mueblería familiar fundada en 2020, dedicada a ofrecer muebles de calidad a precios accesibles.
+            Trabajamos con marcas y proveedores confiables para brindar productos duraderos y funcionales, siempre con un trato cercano y personalizado.
+          </p>
+
+          <p class="lead">
+            Nuestro objetivo es que cada cliente encuentre el mueble ideal para su hogar, de manera sencilla y con la confianza de estar bien asesorado.
+          </p>
+
+          <div class="values" aria-hidden="false">
+            <div class="value">
+              <h4>Misión</h4>
+              <p>Brindar soluciones prácticas y estéticas para el hogar sin sacrificar la calidad.</p>
+            </div>
+
+            <div class="value">
+              <h4>Visión</h4>
+              <p>Ser la opción local más confiable en mobiliario para el hogar, reconocidos por servicio y honestidad.</p>
+            </div>
+
+            <div class="value">
+              <h4>Valores</h4>
+              <p>Calidad, responsabilidad, atención personalizada y precios justos.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="contact-card" aria-labelledby="contacto-title">
+          <h3 id="contacto-title">Contacto y atención</h3>
+          <p>Simon Perez 5282, Gonzales Catan</p>
+          <p>Lunes a Sabados 9:00-13:30 y de 16:30-19:30</p>
+          <p>Tel: <strong>+54 9 11 2345 6789</strong></p>
+          <p>Email: <a href="mailto:walterprieto8@gmail.com">walterprieto8@gmail.com</a></p>
+
+          <a class="btn" href="https://wa.me/5491123456789" target="_blank">Contactarnos</a>
+        </aside>
+      </div>
+    </article>
+
+    <footer class="site-footer" role="contentinfo" aria-label="Pie de página">
+      <div class="wrap">
+        <div>© <span id="year"></span> Mundo Pino — Todos los derechos reservados</div>
+        <div style="font-size:13px;color:var(--muted)">Hecho con ♥ por tu mueblería local</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Actualiza año en el footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <div id="footerPlaceholder"></div>
+    <!-- Scripts al final -->
+    <script src="/js/load-header-footer.js"></script>
+    <script src="/js/tienda-unificada.js"></script>
+</body>
+
+</html>

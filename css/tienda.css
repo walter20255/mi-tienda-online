@@ -1,0 +1,194 @@
+/* --- Base y Margen para Header Fijo --- */
+
+
+/* --- Título de la Página --- */
+.page-content h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #38761d; /* Color verde de tu logo */
+    margin: 15px;
+}
+.category-products{
+    margin: 15px;
+}
+/* --- Contenedor de Filtros y Ordenamiento --- */
+.controls-container {
+    display: flex;
+    justify-content: space-between; /* Espacia los grupos de filtros */
+    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    /* Fondo muy sutil para destacar la sección de filtros */
+    background-color: #f7f7f7; 
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+/* --- Grupos de Filtro Individuales --- */
+.filter-group, .sort-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls-container h3 {
+    margin: 10px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* --- Etiquetas de Filtro --- */
+.controls-container label {
+    font-weight: bold;
+    color: #555;
+}
+
+/* --- Estilo para los Selectores (Dropdowns) --- */
+.controls-container select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.controls-container select:hover {
+    border-color: #38761d; /* Resalta con el color de la marca */
+}
+
+/* --- Grilla de Productos (4 Columnas) --- */
+.product-grid {
+    display: grid;
+    /* Definición clave: 4 columnas de igual ancho (1fr) */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 30px; /* Espaciado entre las tarjetas */
+    padding: 20px 0;
+}
+
+/* --- Estilo de la Tarjeta de Producto --- */
+.product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: box-shadow 0.3s, transform 0.3s;
+    background-color: #fff;
+    overflow: hidden;
+    
+}
+
+.product-card:hover {
+    /* Efecto al pasar el mouse para destacarlo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+.product-card h3 {
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #333;
+}
+
+.product-card p {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #38761d; /* Precio resaltado en color de marca */
+    margin-bottom: 15px;
+}
+
+/* --- Responsive Design --- */
+
+/* Tabletas (hasta 1024px) */
+@media (max-width: 1024px) {
+    .product-grid {
+        /* Cambia a 3 columnas */
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 20px;
+    }
+}
+
+/* Móviles grandes (hasta 768px) */
+@media (max-width: 768px) {
+    .product-grid {
+        /* Cambia a 2 columnas */
+        grid-template-columns: repeat(2, 1fr); 
+    }
+    .controls-container {
+        /* Apila los filtros verticalmente */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    .product-grid {
+        /* Cambia a 1 columna */
+        grid-template-columns: 1fr; 
+    }
+    .page-content {
+        padding: 10px;
+    }
+}
+/* =============================================== */
+/* ELIMINACIÓN DE CONTORNO DE ENFOQUE (OUTLINE RESET) */
+/* =============================================== */
+
+/* 1. Reset general: Cubre enlaces, botones, inputs y selects */
+a:focus,
+a:active,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: inherit; /* Asegura que el borde no cambie de color */
+    box-shadow: none !important; /* Elimina cualquier sombra azul que el navegador pueda añadir */
+}
+
+/* 2. Target Específico para el campo de búsqueda (el más visible en tu imagen) */
+.search-container input[type="text"]:focus {
+    outline: none !important;
+    border-color: #ccc; /* o el color de borde que deseas que mantenga */
+    box-shadow: none !important;
+}
+
+/* 3. Target Específico para los enlaces de navegación */
+.main-nav a:focus,
+.main-nav a:active {
+    outline: none !important;
+    /* Si tienes un color de texto o decoración al hacer hover, también aplícalo aquí */
+    text-decoration: none; 
+}
+
+.added-animation {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlide 1.2s ease-out forwards;
+    z-index: 9999;
+}
+
+@keyframes fadeSlide {
+    0% { opacity: 0; transform: translateY(-20px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
